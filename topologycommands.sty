@@ -1,0 +1,65 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{topologycommands}[2021/10/12 Topology commands]
+
+% Packages
+\RequirePackage{basicmathcommands}
+\RequirePackage{etoolbox}
+
+
+% ======================== Operations =======================
+
+% Closure
+\DeclareMathOperator{\closureop}{Cl}
+
+\newcommand\closure[2][]{%
+    \ifstrempty{#1}{%
+        \altoverline{#2}
+    }{%
+        \closureop_{#1}#2
+    }%
+}
+% https://tex.stackexchange.com/questions/308/different-command-definitions-with-and-without-optional-argument
+
+% Interior
+\DeclareMathOperator{\interior}{Int}
+
+% Boundary
+\newcommand{\boundary}{\partial}
+
+% Wedge sum
+\newcommand{\wedgesum}{\vee}
+
+% Cone
+\newcommand{\cone}{C}
+
+% Disjoint union
+\newcommand{\disunion}{\amalg}
+
+
+% ========================= Spaces ==========================
+
+% Balls and such
+\newcommand{\ball}{\mathbb{B}}
+\newcommand{\clball}{\closure{\ball}}
+\newcommand{\sphere}{\mathbb{S}}
+\newcommand{\torus}{\mathbb{T}}
+
+% Graphs
+\DeclarePairedDelimiter{\graph@aux}{(}{)}
+\newcommand{\graph}[2][]{\Gamma\graph@aux[#1]{#2}}
+
+% Projective space
+\newcommand{\projspace}{\mathbb{P}}
+
+
+% ======================== Relations ========================
+
+% Homeomorphism
+\newcommand{\homeo}{\cong}
+
+
+\endinput
+
+% Issues:
+% - Should disjoint union be here or in set theory?
+% - Implement other relations like (path) homotopy.

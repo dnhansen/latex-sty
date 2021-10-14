@@ -1,0 +1,36 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{partialsymbol}[2021/10/12 Partial symbol]
+
+% newtxmath
+% \renewcommand{\partial}{}
+% \DeclareRobustCommand{\partial}{%
+%   \mathord{\text{\usefont{OML}{ntxmi}{m}{it}\symbol{64}}\mspace{1mu}}%
+% }
+
+% fourier - slanted
+% \DeclareFontEncoding{FML}{}{}%
+% \DeclareFontSubstitution{FML}{futmi}{m}{it}%
+
+% \renewcommand{\partial}{}
+% \DeclareRobustCommand{\partial}{%
+%   \mathord{\text{\usefont{FML}{futmi}{m}{it}\symbol{64}}}%
+% }
+
+% fourier - upright
+\DeclareFontEncoding{FML}{}{}
+\DeclareFontSubstitution{FML}{futm}{m}{it}
+
+\renewcommand{\partial}{}
+\DeclareRobustCommand{\partial}{%
+  \mathord{\text{\usefont{FML}{futm}{m}{it}\symbol{64}}}%
+}
+
+\endinput
+
+% https://tex.stackexchange.com/questions/215270/can-someone-explain-this-weird-font-behavior-ebgaramond-maths
+% https://tex.stackexchange.com/questions/14386/importing-a-single-symbol-from-a-different-font
+% https://tex.stackexchange.com/questions/618718/import-symbol-from-other-font-without-wasting-math-alphabet/
+
+% Issues:
+% - The first solution uses a whole math alphabet because the font has to be declared.
+% - The second solution doesn't allow the symbol to respect \boldmath which might be an issue for other symbols, but there doesn't seem to be a bold version of this symbol anyway, in either newtxmath or in kpfonts.
