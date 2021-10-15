@@ -70,6 +70,21 @@
 \newcommand{\meet}{\land}
 \newcommand{\join}{\lor}
 
+\DeclareMathOperator*{\smallbigvee}{\textstyle\bigvee}
+\DeclareMathOperator*{\bigjoin}{\mathchoice
+	{\smallbigvee}%
+	{\bigvee}%
+	{\bigvee}%
+	{\bigvee}%
+}
+\DeclareMathOperator*{\smallbigwedge}{\textstyle\bigwedge}
+\DeclareMathOperator*{\bigmeet}{\mathchoice
+	{\smallbigwedge}%
+	{\bigwedge}%
+	{\bigwedge}%
+	{\bigwedge}%
+}
+
 
 % ====================== Miscellaneous ======================
 
