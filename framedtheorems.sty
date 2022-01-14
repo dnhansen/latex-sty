@@ -1,15 +1,117 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{framedtheorems}[2021/10/14 Framed theorems]
 
-%==============================================================
-%  THEOREMS
-%==============================================================
-
 \RequirePackage[ntheorem]{mdframed}
 \RequirePackage[amsmath,thmmarks,hyperref]{ntheorem}
 \RequirePackage{thmtools}
 \RequirePackage[capitalize,nameinlink]{cleveref}
 \RequirePackage{enumitem}
+
+%==============================================================
+%  MDTHEOREM BUG FIX
+%==============================================================
+
+% Fixed bug in mdtheorem
+% https://tex.stackexchange.com/questions/179790/mdframed-how-to-change-the-separator-between-the-label-and-the-title-of-a-non-n
+% I also fixed a bug in theoremtitlefont using the starred versions
+\DeclareDocumentCommand{\mdtheorem}{ O{} m o m o }%
+{\ifcsdef{#2}%
+    {\mdf@PackageWarning{Environment #2 already exits\MessageBreak}}%
+    {%
+    \IfNoValueTF {#3}%
+        {%#3 not given -- number relationship
+        \IfNoValueTF {#5}%
+        {%#3+#5 not given
+        \@definecounter{#2}%
+        \expandafter\xdef\csname the#2\endcsname{\@thmcounter{#2}}%
+        \newenvironment{#2}[1][]{%
+            \refstepcounter{#2}%
+            \ifstrempty{##1}%
+            {\let\@temptitle\relax}%
+            {%
+                \def\@temptitle{\mdf@theoremseparator%
+                                \mdf@theoremspace%
+                                \mdf@theoremtitlefont%
+                                ##1}%
+                \mdf@thm@caption{#2}{{#4}{\csname the#2\endcsname}{##1}}%
+                }%
+            \begin{mdframed}[#1,frametitle={\strut#4\ \csname the#2\endcsname%
+                                            \@temptitle}]}%
+            {\end{mdframed}}%
+        \newenvironment{#2*}[1][]{%
+            \ifstrempty{##1}
+            {\let\@temptitle\relax}%
+            {%
+                \def\@temptitle{\mdf@theoremseparator%
+                                \mdf@theoremspace%
+                                \mdf@theoremtitlefont%
+                                ##1}}%
+            \begin{mdframed}[#1,frametitle={\strut#4\@temptitle}]}%
+            {\end{mdframed}}%
+        }%
+        {%#5 given -- reset counter
+        \@definecounter{#2}\@newctr{#2}[#5]%
+        \expandafter\xdef\csname the#2\endcsname{\@thmcounter{#2}}%
+        \expandafter\xdef\csname the#2\endcsname{%
+                \expandafter\noexpand\csname the#5\endcsname \@thmcountersep%
+                    \@thmcounter{#2}}%
+        \newenvironment{#2}[1][]{%
+            \refstepcounter{#2}%
+            \ifstrempty{##1}%
+            {\let\@temptitle\relax}%
+            {%
+                \def\@temptitle{\mdf@theoremseparator%
+                                \mdf@theoremspace%
+                                \mdf@theoremtitlefont%
+                                ##1}%
+                \mdf@thm@caption{#2}{{#4}{\csname the#2\endcsname}{##1}}%
+                }
+            \begin{mdframed}[#1,frametitle={\strut#4\ \csname the#2\endcsname%
+                                            \@temptitle}]}%
+            {\end{mdframed}}%
+        \newenvironment{#2*}[1][]{%
+            \ifstrempty{##1}%
+            {\let\@temptitle\relax}%
+            {%
+                \def\@temptitle{\mdf@theoremseparator%
+                                \mdf@theoremspace%
+                                \mdf@theoremtitlefont%
+                                ##1}%
+                \mdf@thm@caption{#2}{{#4}{\csname the#2\endcsname}{##1}}%
+                }%
+            \begin{mdframed}[#1,frametitle={\strut#4\@temptitle}]}%
+            {\end{mdframed}}%
+        }%
+        }%
+        {%#3 given -- number relationship
+        \global\@namedef{the#2}{\@nameuse{the#3}}%
+        \newenvironment{#2}[1][]{%
+            \refstepcounter{#3}%
+            \ifstrempty{##1}%
+            {\let\@temptitle\relax}%
+            {%
+                \def\@temptitle{\mdf@theoremseparator%
+                                \mdf@theoremspace%
+                                \mdf@theoremtitlefont%
+                                ##1}%
+                \mdf@thm@caption{#2}{{#4}{\csname the#2\endcsname}{##1}}%
+                }
+            \begin{mdframed}[#1,frametitle={\strut#4\ \csname the#2\endcsname%
+                                            \@temptitle}]}%
+            {\end{mdframed}}%
+        \newenvironment{#2*}[1][]{%
+            \ifstrempty{##1}{\let\@temptitle\relax}{\def\@temptitle{:\ ##1}}%
+            \begin{mdframed}[#1,frametitle={\strut#4\@temptitle}]}%
+            {\end{mdframed}}%
+        }%
+    }%
+}
+
+
+
+%==============================================================
+%  THEOREMS
+%==============================================================
 
 % Colours
 \definecolor{titlecolor}{HTML}{d6d6f0}
@@ -18,22 +120,22 @@
 % Framed theorem style
 \mdfdefinestyle{swanntheorem}{%
     skipabove=0.5em plus 0.4em minus 0.2em,
-	skipbelow=0.5em plus 0.4em minus 0.2em,
-	leftmargin=-5pt,
-	rightmargin=-5pt,
-	innerleftmargin=5pt,
-	innerrightmargin=5pt,
-	innertopmargin=5pt,
-	innerbottommargin=4pt,
-	linewidth=0pt,
-	splittopskip=1.2em minus 0.2em,
-	splitbottomskip=0.5em plus 0.2em minus 0.1em,
-	backgroundcolor=backgroundcolor,
-	frametitlebackgroundcolor=titlecolor,
-	frametitlefont={\scshape},
-	theoremtitlefont={\normalfont\itshape},
-	frametitleaboveskip=3pt,
-	frametitlebelowskip=2pt
+    skipbelow=0.5em plus 0.4em minus 0.2em,
+    leftmargin=-5pt,
+    rightmargin=-5pt,
+    innerleftmargin=5pt,
+    innerrightmargin=5pt,
+    innertopmargin=5pt,
+    innerbottommargin=4pt,
+    linewidth=0pt,
+    splittopskip=1.2em minus 0.2em,
+    splitbottomskip=0.5em plus 0.2em minus 0.1em,
+    backgroundcolor=backgroundcolor,
+    frametitlebackgroundcolor=titlecolor,
+    frametitlefont={\scshape},
+    theoremtitlefont={\normalfont\itshape},
+    frametitleaboveskip=3pt,
+    frametitlebelowskip=2pt
 }
 
 % Framed theorems
@@ -95,6 +197,7 @@
 \theoremsymbol{\ensuremath{\square}}
 \newtheorem{proof}{\protect\@proof}
 
+% Proof of
 \newtheoremstyle{MyNonumberplain}%
   {\item[\theorem@headerfont\hskip\labelsep ##1\theorem@separator]}%
   {\item[\theorem@headerfont\hskip\labelsep ##3\theorem@separator]}
@@ -102,6 +205,11 @@
 \theorembodyfont{\upshape}
 \newtheorem{proofof}{Proof}
 % https://tex.stackexchange.com/questions/106072/proof-titles-with-ntheorem
+
+% Sectioned proofs
+\newcommand{\mylistlabelfont}[1]{{\normalfont\color{linkcolor}\textit{#1}:}}
+\newlist{proofsec}{description}{1}
+\setlist[proofsec]{leftmargin=0pt, parsep=0pt, listparindent=\parindent, font=\mylistlabelfont}
 
 
 %==============================================================
@@ -152,44 +260,44 @@
 
 % Language: UKenglish
 \addto\captionsUKenglish{%
-	\renewcommand{\@theorem}{Theorem}%
-	\renewcommand{\@proposition}{Proposition}%
-	\renewcommand{\@corollary}{Corollary}%
-	\renewcommand{\@lemma}{Lemma}%
-	\renewcommand{\@definition}{Definition}%
-	\renewcommand{\@example}{Example}%
-	\renewcommand{\@remark}{Remark}%
-	\renewcommand{\@proof}{Proof}%
-	%
-	\renewcommand{\@theorempl}{Theorems}%
-	\renewcommand{\@propositionpl}{Propositions}%
-	\renewcommand{\@corollarypl}{Corollaries}%
-	\renewcommand{\@lemmapl}{Lemmata}%
-	\renewcommand{\@definitionpl}{Definitions}%
-	\renewcommand{\@examplepl}{Examples}%
-	\renewcommand{\@remarkpl}{Remarks}%
-	\renewcommand{\@proofpl}{Proofs}%
+    \renewcommand{\@theorem}{Theorem}%
+    \renewcommand{\@proposition}{Proposition}%
+    \renewcommand{\@corollary}{Corollary}%
+    \renewcommand{\@lemma}{Lemma}%
+    \renewcommand{\@definition}{Definition}%
+    \renewcommand{\@example}{Example}%
+    \renewcommand{\@remark}{Remark}%
+    \renewcommand{\@proof}{Proof}%
+    %
+    \renewcommand{\@theorempl}{Theorems}%
+    \renewcommand{\@propositionpl}{Propositions}%
+    \renewcommand{\@corollarypl}{Corollaries}%
+    \renewcommand{\@lemmapl}{Lemmata}%
+    \renewcommand{\@definitionpl}{Definitions}%
+    \renewcommand{\@examplepl}{Examples}%
+    \renewcommand{\@remarkpl}{Remarks}%
+    \renewcommand{\@proofpl}{Proofs}%
 }
 
 % Language: danish
 \addto\captionsdanish{%
-	\renewcommand{\@theorem}{Sætning}%
-	\renewcommand{\@proposition}{Proposition}%
-	\renewcommand{\@corollary}{Korollar}%
-	\renewcommand{\@lemma}{Lemma}%
-	\renewcommand{\@definition}{Definition}%
-	\renewcommand{\@example}{Eksempel}%
-	\renewcommand{\@remark}{Bemærkning}%
-	\renewcommand{\@proof}{Bevis}%
-	%
-	\renewcommand{\@theorempl}{Sætninger}%
-	\renewcommand{\@propositionpl}{Propositioner}%
-	\renewcommand{\@corollarypl}{Korollarer}%
-	\renewcommand{\@lemmapl}{Lemmaer}%
-	\renewcommand{\@definitionpl}{Definitioner}%
-	\renewcommand{\@examplepl}{Eksempler}%
-	\renewcommand{\@remarkpl}{Bemærkninger}%
-	\renewcommand{\@proofpl}{Beviser}%
+    \renewcommand{\@theorem}{Sætning}%
+    \renewcommand{\@proposition}{Proposition}%
+    \renewcommand{\@corollary}{Korollar}%
+    \renewcommand{\@lemma}{Lemma}%
+    \renewcommand{\@definition}{Definition}%
+    \renewcommand{\@example}{Eksempel}%
+    \renewcommand{\@remark}{Bemærkning}%
+    \renewcommand{\@proof}{Bevis}%
+    %
+    \renewcommand{\@theorempl}{Sætninger}%
+    \renewcommand{\@propositionpl}{Propositioner}%
+    \renewcommand{\@corollarypl}{Korollarer}%
+    \renewcommand{\@lemmapl}{Lemmaer}%
+    \renewcommand{\@definitionpl}{Definitioner}%
+    \renewcommand{\@examplepl}{Eksempler}%
+    \renewcommand{\@remarkpl}{Bemærkninger}%
+    \renewcommand{\@proofpl}{Beviser}%
 }
 
 
