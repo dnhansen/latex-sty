@@ -44,17 +44,17 @@
 % \bigunion has to use \DeclareMathOperator and not \newcommand! Otherwise the limits don't work properly.
 \DeclareMathOperator*{\smallbigcup}{\textstyle\bigcup}
 \DeclareMathOperator*{\bigunion}{\mathchoice
-	{\smallbigcup}%
-	{\bigcup}%
-	{\bigcup}%
-	{\bigcup}%
+    {\smallbigcup}%
+    {\bigcup}%
+    {\bigcup}%
+    {\bigcup}%
 }
 \DeclareMathOperator*{\smallbigcap}{\textstyle\bigcap}
 \DeclareMathOperator*{\bigintersect}{\mathchoice
-	{\smallbigcap}%
-	{\bigcap}%
-	{\bigcap}%
-	{\bigcap}%
+    {\smallbigcap}%
+    {\bigcap}%
+    {\bigcap}%
+    {\bigcap}%
 }
 
 % Symmetric difference
@@ -65,6 +65,7 @@
 
 % Miscellaneous
 \newcommand\inv{^{-1}}
+\newcommand{\preim}{^{-1}}
 
 % Lattice operations
 \newcommand{\meet}{\land}
@@ -72,17 +73,17 @@
 
 \DeclareMathOperator*{\smallbigvee}{\textstyle\bigvee}
 \DeclareMathOperator*{\bigjoin}{\mathchoice
-	{\smallbigvee}%
-	{\bigvee}%
-	{\bigvee}%
-	{\bigvee}%
+    {\smallbigvee}%
+    {\bigvee}%
+    {\bigvee}%
+    {\bigvee}%
 }
 \DeclareMathOperator*{\smallbigwedge}{\textstyle\bigwedge}
 \DeclareMathOperator*{\bigmeet}{\mathchoice
-	{\smallbigwedge}%
-	{\bigwedge}%
-	{\bigwedge}%
-	{\bigwedge}%
+    {\smallbigwedge}%
+    {\bigwedge}%
+    {\bigwedge}%
+    {\bigwedge}%
 }
 
 
@@ -90,6 +91,10 @@
 
 % Logic
 \renewcommand{\implies}{\Rightarrow}
+
+% Set theory
+\DeclarePairedDelimiter{\card}{\lvert}{\rvert}
+\newcommand{\powerset}[1]{2^{#1}}
 
 % Functions
 \DeclareMathOperator{\id}{id}
