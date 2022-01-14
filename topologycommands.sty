@@ -21,7 +21,15 @@
 % https://tex.stackexchange.com/questions/308/different-command-definitions-with-and-without-optional-argument
 
 % Interior
-\DeclareMathOperator{\interior}{Int}
+\DeclareMathOperator{\interiorop}{Int}
+
+\newcommand\interior[2][]{%
+    \ifstrempty{#1}{%
+        {#2}^{\circ}
+    }{%
+        \interiorop_{#1}#2
+    }%
+}
 
 % Boundary
 \newcommand{\boundary}{\partial}
