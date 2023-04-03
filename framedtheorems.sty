@@ -1,112 +1,12 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{framedtheorems}[2021/10/14 Framed theorems]
+\ProvidesPackage{framedtheorems}[2023/04/03 Framed theorems]
 
 \RequirePackage[ntheorem]{mdframed}
+\RequirePackage{latex-sty/mdframedfix}
 \RequirePackage[amsmath,thmmarks,hyperref]{ntheorem}
 \RequirePackage{thmtools}
 \RequirePackage[capitalize,nameinlink]{cleveref}
 \RequirePackage{enumitem}
-
-%==============================================================
-%  MDTHEOREM BUG FIX
-%==============================================================
-
-% Fixed bug in mdtheorem
-% https://tex.stackexchange.com/questions/179790/mdframed-how-to-change-the-separator-between-the-label-and-the-title-of-a-non-n
-% I also fixed a bug in theoremtitlefont using the starred versions
-\DeclareDocumentCommand{\mdtheorem}{ O{} m o m o }%
-{\ifcsdef{#2}%
-    {\mdf@PackageWarning{Environment #2 already exits\MessageBreak}}%
-    {%
-    \IfNoValueTF {#3}%
-        {%#3 not given -- number relationship
-        \IfNoValueTF {#5}%
-        {%#3+#5 not given
-        \@definecounter{#2}%
-        \expandafter\xdef\csname the#2\endcsname{\@thmcounter{#2}}%
-        \newenvironment{#2}[1][]{%
-            \refstepcounter{#2}%
-            \ifstrempty{##1}%
-            {\let\@temptitle\relax}%
-            {%
-                \def\@temptitle{\mdf@theoremseparator%
-                                \mdf@theoremspace%
-                                \mdf@theoremtitlefont%
-                                ##1}%
-                \mdf@thm@caption{#2}{{#4}{\csname the#2\endcsname}{##1}}%
-                }%
-            \begin{mdframed}[#1,frametitle={\strut#4\ \csname the#2\endcsname%
-                                            \@temptitle}]}%
-            {\end{mdframed}}%
-        \newenvironment{#2*}[1][]{%
-            \ifstrempty{##1}
-            {\let\@temptitle\relax}%
-            {%
-                \def\@temptitle{\mdf@theoremseparator%
-                                \mdf@theoremspace%
-                                \mdf@theoremtitlefont%
-                                ##1}}%
-            \begin{mdframed}[#1,frametitle={\strut#4\@temptitle}]}%
-            {\end{mdframed}}%
-        }%
-        {%#5 given -- reset counter
-        \@definecounter{#2}\@newctr{#2}[#5]%
-        \expandafter\xdef\csname the#2\endcsname{\@thmcounter{#2}}%
-        \expandafter\xdef\csname the#2\endcsname{%
-                \expandafter\noexpand\csname the#5\endcsname \@thmcountersep%
-                    \@thmcounter{#2}}%
-        \newenvironment{#2}[1][]{%
-            \refstepcounter{#2}%
-            \ifstrempty{##1}%
-            {\let\@temptitle\relax}%
-            {%
-                \def\@temptitle{\mdf@theoremseparator%
-                                \mdf@theoremspace%
-                                \mdf@theoremtitlefont%
-                                ##1}%
-                \mdf@thm@caption{#2}{{#4}{\csname the#2\endcsname}{##1}}%
-                }
-            \begin{mdframed}[#1,frametitle={\strut#4\ \csname the#2\endcsname%
-                                            \@temptitle}]}%
-            {\end{mdframed}}%
-        \newenvironment{#2*}[1][]{%
-            \ifstrempty{##1}%
-            {\let\@temptitle\relax}%
-            {%
-                \def\@temptitle{\mdf@theoremseparator%
-                                \mdf@theoremspace%
-                                \mdf@theoremtitlefont%
-                                ##1}%
-                \mdf@thm@caption{#2}{{#4}{\csname the#2\endcsname}{##1}}%
-                }%
-            \begin{mdframed}[#1,frametitle={\strut#4\@temptitle}]}%
-            {\end{mdframed}}%
-        }%
-        }%
-        {%#3 given -- number relationship
-        \global\@namedef{the#2}{\@nameuse{the#3}}%
-        \newenvironment{#2}[1][]{%
-            \refstepcounter{#3}%
-            \ifstrempty{##1}%
-            {\let\@temptitle\relax}%
-            {%
-                \def\@temptitle{\mdf@theoremseparator%
-                                \mdf@theoremspace%
-                                \mdf@theoremtitlefont%
-                                ##1}%
-                \mdf@thm@caption{#2}{{#4}{\csname the#2\endcsname}{##1}}%
-                }
-            \begin{mdframed}[#1,frametitle={\strut#4\ \csname the#2\endcsname%
-                                            \@temptitle}]}%
-            {\end{mdframed}}%
-        \newenvironment{#2*}[1][]{%
-            \ifstrempty{##1}{\let\@temptitle\relax}{\def\@temptitle{:\ ##1}}%
-            \begin{mdframed}[#1,frametitle={\strut#4\@temptitle}]}%
-            {\end{mdframed}}%
-        }%
-    }%
-}
-
 
 
 %==============================================================
@@ -116,6 +16,32 @@
 % Colours
 \definecolor{titlecolor}{HTML}{d6d6f0}
 \definecolor{backgroundcolor}{HTML}{ebebf5}
+
+
+\newcommand{\frame@titlefont}{\scshape}
+\newcommand{\theorem@titlefont}{\normalfont\itshape}
+
+\newcommand{\example@headerfont}{\scshape\color{linkcolor}}
+\newcommand{\example@titlefont}{\normalfont}
+\newcommand{\example@symbol}{\ensuremath{\lrcorner}}
+
+\newcommand{\proof@headerfont}{\example@headerfont}
+\newcommand{\proof@symbol}{\ensuremath{\square}}
+
+\DeclareOption{new}{
+    \renewcommand{\frame@titlefont}{\sffamily\bfseries}
+    % \renewcommand{\theorem@titlefont}{\normalfont\unboldmath\sffamily\itshape}
+    \renewcommand{\theorem@titlefont}{\normalfont\unboldmath\sffamily}
+
+    \renewcommand{\example@headerfont}{\sffamily\bfseries}
+    \renewcommand{\example@titlefont}{\normalfont\unboldmath\sffamily\itshape}
+    
+    \renewcommand{\proof@headerfont}{\sffamily\itshape}
+    % \renewcommand{\proof@symbol}{\ensuremath{\blacksquare}}
+}
+\ProcessOptions\relax
+
+
 
 % Framed theorem style
 \mdfdefinestyle{swanntheorem}{%
@@ -132,8 +58,8 @@
     splitbottomskip=0.5em plus 0.2em minus 0.1em,
     backgroundcolor=backgroundcolor,
     frametitlebackgroundcolor=titlecolor,
-    frametitlefont={\scshape},
-    theoremtitlefont={\normalfont\itshape},
+    frametitlefont=\frame@titlefont,
+    theoremtitlefont=\theorem@titlefont,
     frametitleaboveskip=3pt,
     frametitlebelowskip=2pt
 }
@@ -170,17 +96,17 @@
 % Remarks and examples
 \newtheoremstyle{myexample}%
   {\item[\hskip\labelsep \theorem@headerfont ##1\ ##2\theorem@separator]}%
-  {\item[\hskip\labelsep \theorem@headerfont ##1\ ##2:\ \normalfont##3\theorem@separator]}
+  {\item[\hskip\labelsep \theorem@headerfont ##1\ ##2:\ \example@titlefont##3\theorem@separator]}
 
 \newtheoremstyle{myexamplebreak}%
   {\item[\rlap{\vbox{\hbox{\hskip\labelsep \theorem@headerfont
           ##1\ ##2\theorem@separator}\hbox{\strut}}}]}%
   {\item[\rlap{\vbox{\hbox{\hskip\labelsep \theorem@headerfont
-          ##1\ ##2:\ \normalfont##3\theorem@separator}\hbox{\strut}}}]}
+          ##1\ ##2:\ \normalfont\unboldmath\sffamily\itshape##3\theorem@separator}\hbox{\strut}}}]}
 \theoremseparator{.}
-\theoremheaderfont{\scshape\color{linkcolor}}
+\theoremheaderfont{\example@headerfont}
 \theorembodyfont{\normalfont}
-\theoremsymbol{\ensuremath{\lrcorner}}
+\theoremsymbol{\example@symbol}
 
 \theoremstyle{myexample}
 \newtheorem{remark}[theorem]{\protect\@remark}
@@ -193,8 +119,9 @@
 \newtheorem{examplebreak}[theorem]{\protect\@example}
 
 % Proofs
+\theoremheaderfont{\proof@headerfont}
 \theoremstyle{nonumberplain}
-\theoremsymbol{\ensuremath{\square}}
+\theoremsymbol{\proof@symbol}
 \newtheorem{proof}{\protect\@proof}
 
 % Proof of
@@ -210,153 +137,6 @@
 \newcommand{\mylistlabelfont}[1]{{\normalfont\color{linkcolor}\textit{#1}:}}
 \newlist{proofsec}{description}{1}
 \setlist[proofsec]{leftmargin=0pt, parsep=0pt, listparindent=\parindent, font=\mylistlabelfont}
-
-
-%==============================================================
-%  REFERENCES
-%==============================================================
-
-% Theorems
-\Crefname{theorem}{\protect\@theorem}{\protect\@theorempl}
-\Crefname{proposition}{\protect\@proposition}{\protect\@propositionpl}
-\Crefname{lemma}{\protect\@lemma}{\protect\@lemmapl}
-\Crefname{corollary}{\protect\@corollary}{\protect\@corollarypl}
-\Crefname{definition}{\protect\@definition}{\protect\@definitionpl}
-\Crefname{remark}{\protect\@remark}{\protect\@remarkpl}
-\Crefname{example}{\protect\@example}{\protect\@examplepl}
-% Only defining \Crefname variants automatically defines \crefname variants with initial letter lower case. Use the optional parameter 'capitalise' when importing cleveref to capitalise it automatically.
-
-% Sections
-\Crefname{chapter}{Section}{Sections}
-\Crefname{section}{Subsection}{Subsections}
-
-% Equations
-\crefformat{equation}{#2(#1)#3}
-
-
-%==============================================================
-%  LANGUAGES
-%==============================================================
-
-% Theorem names, singular
-\newcommand{\@theorem}{}
-\newcommand{\@proposition}{}
-\newcommand{\@corollary}{}
-\newcommand{\@lemma}{}
-\newcommand{\@definition}{}
-\newcommand{\@example}{}
-\newcommand{\@remark}{}
-\newcommand{\@proof}{}
-
-% Theorem names, plural
-\newcommand{\@theorempl}{}
-\newcommand{\@propositionpl}{}
-\newcommand{\@corollarypl}{}
-\newcommand{\@lemmapl}{}
-\newcommand{\@definitionpl}{}
-\newcommand{\@examplepl}{}
-\newcommand{\@remarkpl}{}
-\newcommand{\@proofpl}{}
-
-% Language: UKenglish
-\addto\captionsUKenglish{%
-    \renewcommand{\@theorem}{Theorem}%
-    \renewcommand{\@proposition}{Proposition}%
-    \renewcommand{\@corollary}{Corollary}%
-    \renewcommand{\@lemma}{Lemma}%
-    \renewcommand{\@definition}{Definition}%
-    \renewcommand{\@example}{Example}%
-    \renewcommand{\@remark}{Remark}%
-    \renewcommand{\@proof}{Proof}%
-    %
-    \renewcommand{\@theorempl}{Theorems}%
-    \renewcommand{\@propositionpl}{Propositions}%
-    \renewcommand{\@corollarypl}{Corollaries}%
-    \renewcommand{\@lemmapl}{Lemmata}%
-    \renewcommand{\@definitionpl}{Definitions}%
-    \renewcommand{\@examplepl}{Examples}%
-    \renewcommand{\@remarkpl}{Remarks}%
-    \renewcommand{\@proofpl}{Proofs}%
-}
-
-% Language: danish
-\addto\captionsdanish{%
-    \renewcommand{\@theorem}{Sætning}%
-    \renewcommand{\@proposition}{Proposition}%
-    \renewcommand{\@corollary}{Korollar}%
-    \renewcommand{\@lemma}{Lemma}%
-    \renewcommand{\@definition}{Definition}%
-    \renewcommand{\@example}{Eksempel}%
-    \renewcommand{\@remark}{Bemærkning}%
-    \renewcommand{\@proof}{Bevis}%
-    %
-    \renewcommand{\@theorempl}{Sætninger}%
-    \renewcommand{\@propositionpl}{Propositioner}%
-    \renewcommand{\@corollarypl}{Korollarer}%
-    \renewcommand{\@lemmapl}{Lemmaer}%
-    \renewcommand{\@definitionpl}{Definitioner}%
-    \renewcommand{\@examplepl}{Eksempler}%
-    \renewcommand{\@remarkpl}{Bemærkninger}%
-    \renewcommand{\@proofpl}{Beviser}%
-}
-
-
-%==============================================================
-%  THEOREM LIST EXPERIMENT
-%==============================================================
-
-% https://tex.stackexchange.com/a/336213/63353
-
-\newcommand{\enumformat}{(\roman*)}
-\newcommand{\enumsubformat}[1]{(\roman{#1})}
-
-\newcounter{subcreftmpcnt}
-\newcommand\alphsubformat[1]{(\alph{#1})}
-\newcommand\subcref[2][\enumsubformat]{%
-\ifcsname r@#2@cref\endcsname
-  \cref@getcounter {#2}{\mylabel}%
-  \setcounter{subcreftmpcnt}{\mylabel}%
-  \hyperref[#2]{\enumsubformat{subcreftmpcnt}}%
- \else ?? \fi}
-
-
-\newcommand{\mynameref}[2]{%
-    \hyperref[#1]{#2~\labelcref*{#1}}%
-}
-
-\newlist{enumthm}{enumerate}{1}
-\setlist[enumthm]{label=\upshape\enumformat, ref=\upshape\thetheorem\enumformat}
-\crefalias{enumthmi}{theorem}
-
-\newlist{enumprop}{enumerate}{1}
-\setlist[enumprop]{label=\upshape\enumformat, ref=\upshape\thetheorem\enumformat}
-\crefalias{enumpropi}{proposition}
-
-\newlist{enumcor}{enumerate}{1}
-\setlist[enumcor]{label=\upshape\enumformat, ref=\upshape\thetheorem\enumformat}
-\crefalias{enumcori}{corollary}
-
-\newlist{enumlem}{enumerate}{1}
-\setlist[enumlem]{label=\upshape\enumformat, ref=\upshape\thetheorem\enumformat}
-\crefalias{enumlemi}{lemma}
-
-\newlist{enumdef}{enumerate}{1}
-\setlist[enumdef]{label=\upshape\enumformat, ref=\upshape\thetheorem\enumformat}
-\crefalias{enumdefi}{definition}
-
-\newlist{enumclaim}{enumerate}{1}
-\setlist[enumclaim]{label=\upshape\enumformat, ref=\upshape\thetheorem\enumformat}
-\crefalias{enumclaimi}{claim}
-
-\newlist{enumexample}{enumerate}{1}
-\setlist[enumexample]{label=\upshape\enumformat, ref=\upshape\thetheorem\enumformat}
-\crefalias{enumexamplei}{example}
-
-\newlist{enumrem}{enumerate}{1}
-\setlist[enumrem]{label=\upshape\enumformat, ref=\upshape\thetheorem\enumformat}
-\crefalias{enumremi}{remark}
-
-
 
 \endinput
 

@@ -1,0 +1,26 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{sfarticlepagestyle}[2023/04/03 Sans-serif article page style]
+
+\nouppercaseheads
+
+\makepagestyle{sfarticlestyle}
+\makeoddhead{sfarticlestyle}%
+    {\small\sffamily\rightmark}%
+    {}%
+    {\small\sffamily\thepage}
+\copypagestyle{chapter}{plain}
+\makeoddfoot{chapter}{}{\sffamily\thepage}{}
+\makepsmarks{sfarticlestyle}{
+    %\createmark{<section>}{<sides>}{[show]/[no]number}{<before number>}{<after number>}
+	\createmark{chapter}    {both} {shownumber}{}{. \ }
+	\createmark{section}    {right}{shownumber}{}{. \ }
+	\createplainmark{toc}   {both} {\contentsname}
+	\createplainmark{lof}   {both} {\listfigurename}
+	\createplainmark{lot}   {both} {\listtablename}
+	\createplainmark{bib}   {both} {\bibname}
+	\createplainmark{index} {both} {\indexname}
+}
+
+\pagestyle{sfarticlestyle}
+
+\endinput
