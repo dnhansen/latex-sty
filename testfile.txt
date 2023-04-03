@@ -1,3 +1,0 @@
-This is a testfile.
-Added text to testfile.
-Added something locally to testfile.
