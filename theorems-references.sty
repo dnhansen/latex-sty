@@ -111,9 +111,10 @@
 \ifcsname r@#2@cref\endcsname
   \cref@getcounter {#2}{\mylabel}%
   \setcounter{subcreftmpcnt}{\mylabel}%
-  \hyperref[#2]{\enumsubformat{subcreftmpcnt}}%
+  \hyperref[#2]{#1{subcreftmpcnt}}%
  \else ?? \fi}
 
+\newcommand{\secref}[1]{\subcref[\alphsubformat]{#1}}
 
 \newcommand{\mynameref}[2]{%
     \hyperref[#1]{#2~\labelcref*{#1}}%

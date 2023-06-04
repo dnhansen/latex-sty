@@ -1,0 +1,92 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{articlesectionstyle}[2021/10/14 Article section style]
+
+%==============================================================
+%  SECTION TITLES
+%==============================================================
+
+% Colours
+\definecolor{chaptercolor}{HTML}{545454}
+
+
+% Chapter style section-like
+\makeatletter
+\makechapterstyle{articlestyle}{%
+  \chapterstyle{default}
+  \setlength{\beforechapskip}{3.5ex \@plus 1ex \@minus .2ex}
+  \renewcommand*{\chapterheadstart}{\vspace{\beforechapskip}}
+  \setlength{\afterchapskip}{2.3ex \@plus .2ex}
+  \renewcommand{\printchaptername}{}
+  \renewcommand{\chapternamenum}{}
+  \renewcommand{\chaptitlefont}{\normalfont\Large}
+  \renewcommand{\chapnumfont}{\chaptitlefont}
+  \renewcommand{\printchapternum}{\chapnumfont \thechapter~~{\normalsize\textbullet}~~}%\quad}
+  \renewcommand{\afterchapternum}{}}
+\makeatother
+
+
+% Chapter style box, small caps - inspired by Rosulek
+\makechapterstyle{boxscstyle}{%
+	\setlength{\beforechapskip}{0pt}
+	\renewcommand{\chapnamefont}{\large\scshape}
+	\renewcommand{\chapnumfont}{\LARGE\bfseries}
+	\renewcommand{\chaptitlefont}{\raggedright\chapnumfont\scshape}
+	\renewcommand{\printchaptername}{}
+	\renewcommand{\chapternamenum}{}
+	\renewcommand{\printchapternum}{\newcommand\chaptersymb{\thechapter}}
+	\renewcommand{\printchapternonum}{\newcommand\chaptersymb{$\divideontimes$}} % \adfoutlineleafright
+	\renewcommand{\afterchapternum}{}
+	\renewcommand{\printchaptertitle}[1]{%
+		\begin{tabular}{@{}p{1cm} p{\textwidth-3cm}}%
+		\colorbox{chaptercolor}{\color{white}%
+		\makebox[0.85cm]{\chapnumfont\strut \chaptersymb}}
+		& \chaptitlefont \textcolor{chaptercolor}{##1}
+		\end{tabular}
+	}
+}
+
+
+% Chapter style box, sans serif - inspired by Rosulek
+\makechapterstyle{boxsfstyle}{%
+	\setlength{\beforechapskip}{0pt}
+	\renewcommand{\chapnamefont}{\large\scshape}
+	\renewcommand{\chapnumfont}{\sffamily\LARGE\bfseries}
+	\renewcommand{\chaptitlefont}{\raggedright\chapnumfont}
+	\renewcommand{\printchaptername}{}
+	\renewcommand{\chapternamenum}{}
+	\renewcommand{\printchapternum}{\newcommand\chaptersymb{\thechapter}}
+	\renewcommand{\printchapternonum}{\newcommand\chaptersymb{$\divideontimes$}} % \adfoutlineleafright
+	\renewcommand{\afterchapternum}{}
+	\renewcommand{\printchaptertitle}[1]{%
+		\begin{tabular}{@{}p{1cm} p{\textwidth-3cm}}%
+		\colorbox{chaptercolor}{\color{white}%
+		\makebox[0.85cm]{\chapnumfont\strut \chaptersymb}}
+		& \chaptitlefont \textcolor{chaptercolor}{##1}
+		\end{tabular}
+	}
+}
+
+
+\DeclareOption{boxsc}{
+  \chapterstyle{boxscstyle}
+}
+\DeclareOption{boxsf}{
+  \chapterstyle{boxsfstyle}
+}
+\DeclareOption{article}{
+  \chapterstyle{articlestyle}
+}
+\DeclareOption{it}{
+  \setsecheadstyle{\normalfont\large\itshape}
+  \setsubsecheadstyle{\normalfont\itshape}
+  \setsecnumformat{\csname the#1\endcsname.~~}
+}
+\DeclareOption{bf}{
+  \setsecheadstyle{\normalfont\Large\bfseries\color{white!20!black}}
+  \setsubsecheadstyle{\normalfont\Large\bfseries\color{white!20!black}}
+  \setsecnumformat{\csname the#1\endcsname~~\ensuremath{\diamond}~~}
+}
+\ProcessOptions\relax
+
+
+\endinput

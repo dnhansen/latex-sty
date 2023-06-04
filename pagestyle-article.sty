@@ -1,0 +1,77 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{articlepagestyle}[2021/10/14 Article page style]
+
+% Italic header
+
+\makepagestyle{articleit}
+\makeoddhead{articleit}%
+    {\small\itshape\rightmark}%
+    {}%
+    {\small\itshape\thepage}
+\makeoddfoot{articleit}{}{}{}
+\makepsmarks{articleit}{
+	\createmark{chapter}    {both} {shownumber}{}{. \ }
+	\createmark{section}    {right}{shownumber}{}{. \ }
+	\createplainmark{toc}   {both} {\contentsname}
+	\createplainmark{lof}   {both} {\listfigurename}
+	\createplainmark{lot}   {both} {\listtablename}
+	\createplainmark{bib}   {both} {\bibname}
+	\createplainmark{index} {both} {\indexname}
+}
+
+
+% Small caps header
+
+\makepagestyle{articlesc}
+\makeoddhead{articlesc}%
+    {\small\rightmark}%
+    {}%
+    {\small\thepage}
+\makeoddfoot{articlesc}{}{}{}
+\makepsmarks{articlesc}{
+	\createmark{chapter}    {both} {shownumber}{}{. \ }
+	\createmark{section}    {right}{shownumber}{}{. \ }
+	\createplainmark{toc}   {both} {\contentsname}
+	\createplainmark{lof}   {both} {\listfigurename}
+	\createplainmark{lot}   {both} {\listtablename}
+	\createplainmark{bib}   {both} {\bibname}
+	\createplainmark{index} {both} {\indexname}
+}
+
+
+% Sans serif header
+
+\makepagestyle{articlesf}
+\makeoddhead{articlesf}%
+    {\small\sffamily\rightmark}%
+    {}%
+    {\small\sffamily\thepage}
+\makepsmarks{articlesf}{
+	\createmark{chapter}    {both} {shownumber}{}{. \ }
+	\createmark{section}    {right}{shownumber}{}{. \ }
+	\createplainmark{toc}   {both} {\contentsname}
+	\createplainmark{lof}   {both} {\listfigurename}
+	\createplainmark{lot}   {both} {\listtablename}
+	\createplainmark{bib}   {both} {\bibname}
+	\createplainmark{index} {both} {\indexname}
+}
+
+% Options
+
+\DeclareOption{sc}{
+	\renewcommand*{\memUChead}[1]{\normalfont\unboldmath\scshape\MakeTextLowercase{#1}}
+	\pagestyle{articlesc}
+}
+\DeclareOption{it}{
+	\nouppercaseheads
+	\pagestyle{articleit}
+}
+\DeclareOption{sf}{
+	\nouppercaseheads
+	\copypagestyle{chapter}{plain}
+	\makeoddfoot{chapter}{}{\sffamily\thepage}{}
+	\pagestyle{articlesf}
+}
+\ProcessOptions\relax
+
+\endinput

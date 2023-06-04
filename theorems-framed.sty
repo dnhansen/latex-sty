@@ -2,7 +2,7 @@
 \ProvidesPackage{framedtheorems}[2023/04/03 Framed theorems]
 
 \RequirePackage[ntheorem]{mdframed}
-\RequirePackage{latex-sty/mdframedfix}
+\RequirePackage{latex-sty/theorems-mdframedfix}
 \RequirePackage[amsmath,thmmarks,hyperref]{ntheorem}
 \RequirePackage{thmtools}
 \RequirePackage[capitalize,nameinlink]{cleveref}
@@ -13,34 +13,33 @@
 %  THEOREMS
 %==============================================================
 
-% Colours
+% Fonts and typography
 \definecolor{titlecolor}{HTML}{d6d6f0}
 \definecolor{backgroundcolor}{HTML}{ebebf5}
 
+\DeclareOption{sc}{
+    \newcommand{\frame@titlefont}{\scshape}
+    \newcommand{\theorem@titlefont}{\normalfont\itshape}
 
-\newcommand{\frame@titlefont}{\scshape}
-\newcommand{\theorem@titlefont}{\normalfont\itshape}
+    \newcommand{\example@headerfont}{\scshape\color{linkcolor}}
+    \newcommand{\example@titlefont}{\normalfont}
+    \newcommand{\example@symbol}{\ensuremath{\lrcorner}}
 
-\newcommand{\example@headerfont}{\scshape\color{linkcolor}}
-\newcommand{\example@titlefont}{\normalfont}
-\newcommand{\example@symbol}{\ensuremath{\lrcorner}}
+    \newcommand{\proof@headerfont}{\example@headerfont}
+}
+\DeclareOption{sf}{
+    \newcommand{\frame@titlefont}{\sffamily\bfseries}
+    \newcommand{\theorem@titlefont}{\normalfont\unboldmath\sffamily}
 
-\newcommand{\proof@headerfont}{\example@headerfont}
-\newcommand{\proof@symbol}{\ensuremath{\square}}
-
-\DeclareOption{new}{
-    \renewcommand{\frame@titlefont}{\sffamily\bfseries}
-    % \renewcommand{\theorem@titlefont}{\normalfont\unboldmath\sffamily\itshape}
-    \renewcommand{\theorem@titlefont}{\normalfont\unboldmath\sffamily}
-
-    \renewcommand{\example@headerfont}{\sffamily\bfseries}
-    \renewcommand{\example@titlefont}{\normalfont\unboldmath\sffamily\itshape}
+    \newcommand{\example@headerfont}{\sffamily\bfseries}
+    \newcommand{\example@titlefont}{\normalfont\unboldmath\sffamily\itshape}
+    \newcommand{\example@symbol}{\ensuremath{\lrcorner}}
     
-    \renewcommand{\proof@headerfont}{\sffamily\itshape}
-    % \renewcommand{\proof@symbol}{\ensuremath{\blacksquare}}
+    \newcommand{\proof@headerfont}{\sffamily\itshape}
 }
 \ProcessOptions\relax
 
+\newcommand{\proof@symbol}{\ensuremath{\square}}
 
 
 % Framed theorem style
@@ -93,6 +92,7 @@
 
 % https://tex.stackexchange.com/questions/175961/theorem-and-lemma-sharing-counter-with-mdframed-and-cleveref
 
+
 % Remarks and examples
 \newtheoremstyle{myexample}%
   {\item[\hskip\labelsep \theorem@headerfont ##1\ ##2\theorem@separator]}%
@@ -141,6 +141,7 @@
 \endinput
 
 % Issues:
+% - Doesn't support noproof theorems
 % - Make it possible to give parameter to change between chapter and section numbering.
 % - Make it independent of memoir?
 % - Script to automatically generate LaTeX code.
